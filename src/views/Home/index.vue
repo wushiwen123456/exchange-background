@@ -4,7 +4,7 @@
     <el-header>
       <div class="logo-con">
         <img class="logo" src="~@/assets/logo.png" />
-        <span style="font-weight:blod">缔造容颜后台管理系统</span>
+        <span style="font-weight:blod">SAFEEX后台管理系统</span>
       </div>
       <el-button type="info">退出</el-button>
     </el-header>

@@ -1,19 +1,3 @@
-# vue-brother-pro
+# Project
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+这是一个基于 Vue + ElementUI 搭建的后台管理项目模板
