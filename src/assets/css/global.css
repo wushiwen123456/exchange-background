@@ -13,10 +13,32 @@ body,
 }
 body {
   font-size: 14px;
+  min-width: 960px;
+  font-family: 'Arial', 'Microsoft YaHei', '黑体', '宋体', sans-serif;
 }
 .el-breadcrumb {
   margin-bottom: 15px;
 }
 .el-card {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;
+}
+.el-dialog__wrapper {
+  overflow: hidden;
+}
+.text-cut {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.el-scrollbar__wrap.default-scrollbar__wrap {
+  overflow-x: auto !important;
+}
+.customWH {
+  margin-top: 6vh !important;
+}
+.ql-editor {
+  min-height: 220px;
+}
+.welcome-e .el-card__header {
+  border: none;
 }

@@ -3,51 +3,53 @@
     <!-- 头部区域 -->
     <el-header>
       <div class="logo-con">
-        <img class="logo" src="~@/assets/logo.png" />
-        <span style="font-weight:blod">SAFEEX后台管理系统</span>
+        <img class="logo" src="~@/assets/logo.png" @click="homeClick" />
+        <span style="font-weight:blod">管 理 系 统</span>
       </div>
-      <el-button type="info">退出</el-button>
+      <el-button @click="logout" type="info">退出</el-button>
     </el-header>
     <!-- 页面主题区域 -->
     <el-container>
       <!-- 侧边栏 -->
       <el-aside :width="isCollapse ? '64px' : '200px'">
-        <div class="toggle-button" @click="toggleCollapse">|||</div>
-        <!-- 侧边栏菜单 -->
-        <el-menu
-          background-color="#333744"
-          text-color="#fff"
-          active-text-color="#409eff"
-          unique-opened
-          :collapse="isCollapse"
-          :collapse-transition="false"
-          :default-active="activePath"
-          router
-        >
-          <!-- 一级菜单区 -->
-          <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
-            <!-- 一级菜单模板区域 -->
-            <template slot="title">
-              <!-- 图标 -->
-              <i :class="iconObj[item.id]"></i>
-              <!-- 文本 -->
-              <span>{{item.authName}}</span>
-            </template>
-            <!-- 二级菜单 -->
-            <el-menu-item
-              :index="'/' + subItem.path"
-              v-for="subItem in item.children"
-              :key="subItem.id"
-              @click="saveNavState('/' + subItem.path)"
-            >
+        <el-scrollbar>
+          <div class="toggle-button" @click="toggleCollapse">|||</div>
+          <!-- 侧边栏菜单 -->
+          <el-menu
+            background-color="#1E2735"
+            text-color="#fff"
+            active-text-color="#409eff"
+            unique-opened
+            :collapse="isCollapse"
+            :collapse-transition="false"
+            :default-active="activePath"
+            router
+          >
+            <!-- 一级菜单区 -->
+            <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
+              <!-- 一级菜单模板区域 -->
               <template slot="title">
-                <i class="el-icon-menu"></i>
+                <!-- 图标 -->
+                <!-- <i :class="iconObj[item.id]"></i> -->
+                <i :class="['iconfont',item.icon]"></i>
                 <!-- 文本 -->
-                <span>{{subItem.authName}}</span>
+                <span>{{item.authName}}</span>
               </template>
-            </el-menu-item>
-          </el-submenu>
-        </el-menu>
+              <!-- 二级菜单 -->
+              <el-menu-item
+                :index="subItem.path"
+                v-for="subItem in item.children"
+                :key="subItem.id"
+              >
+                <template slot="title">
+                  <i class="el-icon-menu"></i>
+                  <!-- 文本 -->
+                  <span>{{subItem.authName}}</span>
+                </template>
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
+        </el-scrollbar>
       </el-aside>
       <!-- 右侧内容主体 -->
       <el-main>
@@ -58,112 +60,111 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
       isCollapse: false,
-      activePath: "",
-      menuList: [
-        {
-          id: 10000,
-          authName: "用户管理",
-          path: "users",
-          children: [
-            {
-              id: 10001,
-              authName: "用户管理",
-              path: "users",
-            },
-          ],
-        },
-        {
-          id: 20000,
-          authName: "商品管理",
-          path: "product",
-          children: [
-            {
-              id: 20001,
-              authName: "用户管理",
-              path: "users2",
-            },
-          ],
-        },
-        {
-          id: 30000,
-          authName: "礼品管理",
-          path: "gift",
-          children: [],
-        },
-        {
-          id: 40000,
-          authName: "规格管理",
-          path: "norms",
-          children: [],
-        },
-        {
-          id: 50000,
-          authName: "运费管理",
-          path: "post",
-          children: [],
-        },
-        {
-          id: 60000,
-          authName: "订单管理",
-          path: "order",
-          children: [],
-        },
-        {
-          id: 70000,
-          authName: "线上商家管理",
-          path: "onlineStore",
-          children: [],
-        },
-        {
-          id: 80000,
-          authName: "广告管理",
-          path: "ad",
-          children: [],
-        },
-        {
-          id: 90000,
-          authName: "进出明细",
-          path: "inout",
-          children: [],
-        },
-        {
-          id: 100000,
-          authName: "财务管理",
-          path: "affairs",
-          children: [],
-        },
-      ],
+      activePath: '',
+      menuList: [],
       iconObj: {
-        "10000": "iconfont icon-group_fill",
-        "20000": "iconfont icon-shangpin",
-        "30000": "iconfont icon-liping",
-        "40000": "iconfont icon-guige",
-        "50000": "iconfont icon-banyunfei",
-        "60000": "iconfont icon-dingdan",
-        "70000": "iconfont icon-store",
-        "80000": "iconfont icon-guanggao",
-        "90000": "iconfont icon-RectangleCopy",
-        "100000": "iconfont icon-caiwu",
+        '10000': 'iconfont icon-group_fill',
+        '20000': 'iconfont icon-shangpin',
+        '30000': 'iconfont icon-liping',
+        '40000': 'iconfont icon-guige',
+        '50000': 'iconfont icon-banyunfei',
+        '60000': 'iconfont icon-dingdan',
+        '70000': 'iconfont icon-store',
+        '80000': 'iconfont icon-guanggao',
+        '90000': 'iconfont icon-RectangleCopy',
+        '100000': 'iconfont icon-caiwu',
       },
-    };
+    }
+  },
+  computed: {
+    ...mapGetters(['isUserRouter']),
+    route() {
+      return this.$route
+    },
   },
   created() {
-    this.activePath = window.sessionStorage.getItem("activePath");
+    this.activePath = window.sessionStorage.getItem('activePath')
+    if (this.isUserRouter) {
+      this.handleSetMenus(this.isUserRouter)
+    }
+  },
+  watch: {
+    route(value) {
+      const path = value.path
+      this.saveNavState(path)
+    },
   },
   methods: {
     toggleCollapse() {
-      this.isCollapse = !this.isCollapse;
+      this.isCollapse = !this.isCollapse
     },
     saveNavState(activePath) {
-      window.sessionStorage.setItem("activePath", activePath);
-      this.activePath = activePath;
+      window.sessionStorage.setItem('activePath', activePath)
+      this.activePath = activePath
+    },
+    logout() {
+      this.$store.commit('logOut')
+      this.$router.push('/')
+    },
+    homeClick() {
+      this.$router.push('/home')
+    },
+    // 根据数据创建菜单
+    handleSetMenus(rules) {
+      let rulesArr = []
+      if (rules.length) {
+        if (rules[0].children) rulesArr = rules[0].children
+      }
+      rulesArr = rulesArr.sort(this.handleSortRule('cid'))
+      this.menuList = this.handleParent(rulesArr)
+    },
+    handleParent(rulesArr) {
+      const arr = []
+      rulesArr.forEach((item) => {
+        if (!item.parentsName) return
+        if (arr.some((li) => li.authName == item.parentsName)) {
+          this.handleAddChildren(item, arr)
+        } else {
+          const children = []
+          children.push({
+            id: item.cid,
+            authName: item.authName,
+            path: item.path,
+          })
+          arr.push({
+            id: item.pid,
+            authName: item.parentsName,
+            path: item.parentsPath,
+            children,
+            icon: item.icon,
+          })
+        }
+      })
+      return arr
+    },
+    // 有父路径情况下就添加到父路径的children中
+    handleAddChildren(item, arr) {
+      const aItem = arr.find((it) => it.authName == item.parentsName)
+      if (aItem) {
+        aItem.children.push({
+          id: item.cid,
+          authName: item.authName,
+          path: item.path,
+        })
+      }
+    },
+    handleSortRule(prop) {
+      return (a, b) => {
+        return a[prop] * 1 - b[prop] * 1
+      }
     },
   },
-};
+}
 </script>
 
 <style scoped>
@@ -171,7 +172,7 @@ export default {
   height: 100%;
 }
 .el-header {
-  background-color: #373d41;
+  background-color: #1e2735;
   display: flex;
   justify-content: space-between;
   padding-left: 0;
@@ -182,14 +183,14 @@ export default {
   align-items: center;
   color: #fff;
   font-size: 20px;
+  cursor: pointer;
 }
 .logo {
-  width: 40px;
   height: 40px;
-  margin-right: 15px;
+  margin: 0 15px;
 }
 .el-aside {
-  background-color: #333744;
+  background-color: #1e2735;
 }
 .el-main {
   background-color: #eaedf1;
