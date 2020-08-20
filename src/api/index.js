@@ -326,6 +326,15 @@ export function refuseOrder(data) {
   })
 }
 
+// 判断账号是否可用
+export function hasEmail(data) {
+  return request({
+    url: '/adminUser/is_email',
+    method: 'get',
+    params: data
+  })
+}
+
 /**
  * 首页
  */
@@ -339,8 +348,8 @@ export function getHomeDate() {
 // 获取近期交易记录
 export function dealsRecord(data) {
   return request({
-    url: 'home/Allreal',
-    method: 'POST',
-    data
+    url: 'home/k_line',
+    method: 'get',
+    params: data
   })
 }

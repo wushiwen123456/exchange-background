@@ -23,14 +23,6 @@ Vue.filter('capitalizeTime', (timestemp, fmt = 'yyyy-MM-dd hh:mm:ss') => {
 // 导入静态地址
 import { baseUrl } from '@/assets/const/index'
 
-// 导入vue-echarts
-import Echarts from 'vue-echarts'
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/chart/line'
-
-Vue.component('v-chart', Echarts)
-
 import store from './store'
 Vue.prototype.$baseUrl = baseUrl
 

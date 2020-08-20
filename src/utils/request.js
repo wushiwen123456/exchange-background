@@ -50,6 +50,8 @@ export function request(config) {
             })
             return res.data.msg
         }
+      } else {
+        console.log(res)
       }
     },
     err => {

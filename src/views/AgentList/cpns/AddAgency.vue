@@ -2,7 +2,7 @@
   <el-dialog :title="title" :visible.sync="dialogVisible" width="40%" @close="cleanForm">
     <scroll-container>
       <el-scrollbar style="height:100%" wrap-class="default-scrollbar__wrap">
-        <el-form :model="form" :rules="rules" ref="form" label-width="auto">
+        <el-form :model="form" :rules="rules" ref="form" label-width="auto" status-icon>
           <el-form-item label="角色">
             <el-select v-model="form.department_id" placeholder="请选择角色">
               <el-option
@@ -21,17 +21,15 @@
               :fetch-suggestions="querySearch"
               placeholder="请输入账号"
               :trigger-on-focus="false"
+              @select="handleSelect"
             ></el-autocomplete>
           </el-form-item>
           <el-form-item label="密码" prop="password" v-if="showPassword">
-            <el-input
-              v-model="form.password"
-              class="text-input"
-              placeholder="请输入密码"
-              :type="isPwd ? 'password' : 'text'"
-            >
-              <i slot="suffix" class="el-input__icon el-icon-view" @click="changePwd"></i>
-            </el-input>
+            <el-input v-model="form.password" class="text-input" placeholder="请输入密码"></el-input>
+            <span class="tips">* 请输入输入6-20个字母、数字、下划线组成的密码</span>
+          </el-form-item>
+          <el-form-item label="确认密码" prop="confirmPassword" v-if="showPassword">
+            <el-input v-model="form.confirmPassword" class="text-input" placeholder="请输入密码"></el-input>
             <span class="tips">* 请输入输入6-20个字母、数字、下划线组成的密码</span>
           </el-form-item>
           <el-form-item label="代理币种">
@@ -56,7 +54,7 @@
 </template>
 
 <script>
-import { noCoin, addAgency } from '@/api'
+import { noCoin, addAgency, hasEmail } from '@/api'
 import ScrollContainer from '@/components/ScrollContainer'
 export default {
   filters: {
@@ -75,7 +73,7 @@ export default {
       if (!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)) {
         return callback(new Error('请输入正确的邮箱格式规范'))
       }
-      return callback()
+      return this.hasEmail(value, callback)
     }
     var validatePassword = (rule, value, callback) => {
       if (!this.showPassword) return callback()
@@ -87,7 +85,25 @@ export default {
           new Error('请输入输入6-20个字母、数字、下划线组成的密码')
         )
       }
+      if (this.form.confirmPassword !== '') {
+        this.$refs.form.validateField('confirmPassword')
+      }
       return callback()
+    }
+    var validateConPassword = (rule, value, callback) => {
+      if (!this.showPassword) return callback()
+      if (value === '') {
+        return callback('请再次输入密码')
+      }
+      if (!/^(\w){6,20}$/.test(value)) {
+        return callback(
+          new Error('请输入输入6-20个字母、数字、下划线组成的密码')
+        )
+      }
+      if (value !== this.form.password) {
+        return callback(new Error('两次输入密码不一致!'))
+      }
+      callback()
     }
     return {
       dialogVisible: false,
@@ -95,9 +111,9 @@ export default {
         email: '',
         password: '',
         coin_id: '',
+        confirmPassword: '',
         department_id: 0,
       },
-      isPwd: true,
       coinList: [],
       permissList: [
         {
@@ -121,6 +137,9 @@ export default {
         password: [
           { required: true, validator: validatePassword, trigger: 'blur' },
         ],
+        confirmPassword: [
+          { required: true, validator: validateConPassword, trigger: 'blur' },
+        ],
       },
       showPassword: false,
     }
@@ -141,7 +160,6 @@ export default {
         this.title = '添加成员'
         this.showPassword = true
       }
-      console.log(this.form)
       this.dialogVisible = true
       this.getNoCoin()
     },
@@ -155,6 +173,9 @@ export default {
     },
     querySearch(queryString, cb) {
       const arr = []
+      if (!/^[A-Za-z0-9]+$/.test(queryString)) {
+        return cb([])
+      }
       arr.push({
         value: queryString + '@qq.com',
       })
@@ -165,8 +186,8 @@ export default {
       // 调用 callback 返回建议列表的数据
       cb(results)
     },
-    changePwd() {
-      this.isPwd = !this.isPwd
+    handleSelect(val) {
+      console.log(val)
     },
     handleSubmit() {
       console.log(this.$refs.form)
@@ -188,6 +209,18 @@ export default {
     cleanForm() {
       if (this.$refs.form) {
         this.$refs.form.resetFields()
+      }
+    },
+    // 判断账号是否可用
+    async hasEmail(value, callback) {
+      const data = {
+        email: value,
+      }
+      const res = await hasEmail(data)
+      if (res.code == 200) {
+        callback()
+      } else {
+        callback(new Error(res.msg))
       }
     },
   },

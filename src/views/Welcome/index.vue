@@ -1,115 +1,272 @@
 <template>
-  <div class="container">
-    <el-row style="height:30px">
-      <el-col :span="24">
-        <scroll-inline :data-list="list"></scroll-inline>
-      </el-col>
-    </el-row>
-    <el-carousel indicator-position="none" :autoplay="false" height="220px" style="margin-top:15px">
-      <el-carousel-item v-for="(item1,index1) in list1" :key="index1">
-        <el-row :gutter="30" style="margin-top:15px">
-          <el-col
-            :span="8"
-            v-for="(item2,index2) in item1"
-            :key="item2.id"
-            style="margin-bottom:15px"
-          >
-            <el-card class="my-cary" @click.stop.native="handleClickItem2(item2,index2)">
-              <div class="coin-info">
-                <div class="coin-img">
-                  <img :src="item2.url" />
+  <scroll-container
+    height="89vh"
+    v-loading="loading"
+    element-loading-text="正在搜集币种信息..."
+    element-loading-spinner="el-icon-loading"
+  >
+    <el-scrollbar style="height:100%" wrap-class="default-scrollbar__wrap">
+      <div class="container">
+        <el-row style="height:30px">
+          <el-col :span="24">
+            <scroll-inline :data-list="list"></scroll-inline>
+          </el-col>
+        </el-row>
+        <el-carousel
+          indicator-position="none"
+          :autoplay="false"
+          height="220px"
+          style="margin-top:15px"
+        >
+          <el-carousel-item v-for="(item1,index1) in list1" :key="index1">
+            <el-row :gutter="30" style="margin-top:15px">
+              <el-col
+                :span="8"
+                v-for="(item2,index2) in item1"
+                :key="item2.id"
+                style="margin-bottom:15px"
+              >
+                <el-card class="my-cary" @click.stop.native="handleClickItem2(index1,index2)">
+                  <div class="coin-info">
+                    <div class="coin-img">
+                      <img :src="item2.url" />
+                    </div>
+                    <div class="coin-info-m">
+                      <h3 class="info-title mb-8">{{item2.coin}} / USDT</h3>
+                      <span class="info-text mb-8">
+                        <span class="mr15">
+                          <i class="el-icon-bottom low-price"></i>
+                          <span>{{item2.low}}</span>
+                        </span>
+                        <span>
+                          <span>{{item2.high}}</span>
+                          <i class="el-icon-top high-price"></i>
+                        </span>
+                      </span>
+                    </div>
+                    <div class="coin-info-r">
+                      <h3 class="info-title mb-8">${{item2.price}}</h3>
+                      <span
+                        :class="[isTop(item2.percent_change) ? 'high-price' : 'low-price']"
+                        class="info-text mb-8"
+                      >
+                        <span>{{item2.percent_change}} %</span>
+                        <i
+                          :class="[isTop(item2.percent_change) ? 'el-icon-top' : 'el-icon-bottom']"
+                        ></i>
+                      </span>
+                    </div>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
+          </el-carousel-item>
+        </el-carousel>
+        <el-row class="welcome-e" :gutter="30">
+          <el-col :span="24">
+            <el-card>
+              <div>
+                <span class="card-title">成交量统计</span>
+              </div>
+              <div class="e-main">
+                <div class="e-left">
+                  <div class="e-item">
+                    <span>交易币种</span>
+                    <b>
+                      <img :src="currentItem.url" class="current-img" />
+                      {{currentItem.coin}}
+                    </b>
+                  </div>
+                  <div class="e-item">
+                    <span>价格涨幅</span>
+                    <b>
+                      {{currentItem.percent_change}}%
+                      <span title="24小时统计">
+                        <i
+                          class="iconfont"
+                          :class="[isCurrentUp(currentItem) ? 'icon-tubiaoshangshengqushi' : 'icon-tubiaoxiajiangqushi']"
+                        ></i>
+                      </span>
+                    </b>
+                  </div>
                 </div>
-                <div class="coin-info-m">
-                  <h3 class="info-title mb-8">{{item2.coin}} / USDT</h3>
-                  <span class="info-text mb-8">
-                    <span class="mr15">
-                      <i class="el-icon-bottom low-price"></i>
-                      <span>{{item2.low}}</span>
-                    </span>
-                    <span>
-                      <span>{{item2.high}}</span>
-                      <i class="el-icon-top high-price"></i>
-                    </span>
-                  </span>
-                </div>
-                <div class="coin-info-r">
-                  <h3 class="info-title mb-8">${{item2.price}}</h3>
-                  <span
-                    :class="[isTop(item2.percent_change) ? 'high-price' : 'low-price']"
-                    class="info-text mb-8"
-                  >
-                    <span>{{item2.percent_change}} %</span>
-                    <i :class="[isTop(item2.percent_change) ? 'el-icon-top' : 'el-icon-bottom']"></i>
-                  </span>
+                <div class="eachart-box">
+                  <e-charts v-if="hasKData" ref="chart" />
+                  <div v-else class="noKData">
+                    <i class="el-icon-warning" style="margin-right:5px;margin-top:2px"></i>
+                    暂无相关数据
+                  </div>
                 </div>
               </div>
             </el-card>
           </el-col>
+          <el-col :span="8" style="margin-top:15px">
+            <el-card :body-style="{paddingTop:0}">
+              <div slot="header">
+                <span class="card-title">交易历史</span>
+              </div>
+              <scroll-container height="360px">
+                <el-scrollbar style="height:100%" wrap-class="default-scrollbar__wrap">
+                  <div class="wel-table">
+                    <div class="table-title">
+                      <div>价格($)</div>
+                      <div>数量</div>
+                      <div style="text-align:right">日期</div>
+                    </div>
+                    <div class="wel-main">
+                      <div class="wei-item" v-for="item in orderList" :key="item.id">
+                        <div :class="[item.type == 0 ? 'buy-color' : 'sell-color']">{{item.price}}</div>
+                        <div>
+                          <img :src="Coin(item.pair)" class="order-coin" />
+                          <span>{{item.num}}</span>
+                        </div>
+                        <div style="text-align:right">{{item.update_at | capitalizeTime}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </el-scrollbar>
+              </scroll-container>
+            </el-card>
+          </el-col>
+          <el-col :span="16" style="margin-top:15px">
+            <el-card :body-style="{paddingTop:0}">
+              <div slot="header">
+                <span class="card-title">正在进行</span>
+              </div>
+              <scroll-container height="360px">
+                <el-scrollbar style="height:100%" wrap-class="default-scrollbar__wrap">
+                  <div class="wel-table">
+                    <div class="table-title">
+                      <div class="t-data">日期</div>
+                      <div class="t-type">种类</div>
+                      <div class="t-number">数量</div>
+                      <div class="t-remain">剩余数量</div>
+                      <div class="t-price">价格</div>
+                      <div class="t-usd">USD</div>
+                      <div class="t-fee">手续费(%)</div>
+                      <div class="t-cancel">取消</div>
+                    </div>
+                    <div class="wel-main">
+                      <div class="wei-item" v-for="item in orderActive" :key="item.id">
+                        <div class="t-data">{{item.update_at | capitalizeTime}}</div>
+                        <div class="t-type">{{item.type == 0 ? 'Buy' : 'Sell'}}</div>
+                        <div class="t-number">
+                          <img :src="Coin(item.pair)" class="order-coin" />
+                          <span>{{item.num}}</span>
+                        </div>
+                        <div class="t-remain">
+                          <img :src="Coin(item.pair)" class="order-coin" />
+                          <span>{{item.num}}</span>
+                        </div>
+                        <div class="t-price">{{item.price}}</div>
+                        <div class="t-usd">{{item.price}}</div>
+                        <div class="t-fee">{{item.fee | capitalizeFee}}</div>
+                        <div class="t-cancel">
+                          <span @click="cancelOrder(item.id)" class="btn-cancel btn-sm">取消</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </el-scrollbar>
+              </scroll-container>
+            </el-card>
+          </el-col>
         </el-row>
-      </el-carousel-item>
-    </el-carousel>
-    <el-row class="welcome-e">
-      <el-col :span="24">
-        <el-card>
-          <div slot="header">
-            <span class="card-title">交易统计</span>
-          </div>
-          <div class="e-main">
-            <div class="e-left">
-              <div class="e-item">
-                <span>交易币种</span>
-                <b>BTC</b>
+        <el-row :gutter="30">
+          <el-col :span="13" style="margin-top:15px">
+            <el-card :body-style="{paddingTop:0}">
+              <div slot="header">
+                <span class="card-title">买单</span>
               </div>
-              <div class="e-item">
-                <span>价格涨幅</span>
-                <b>
-                  0
-                  <span title="24小时统计">
-                    <i class="iconfont icon-tubiaoshangshengqushi"></i>
-                  </span>
-                </b>
+              <scroll-container height="360px">
+                <el-scrollbar style="height:100%" wrap-class="default-scrollbar__wrap">
+                  <div class="wel-table">
+                    <div class="table-title">
+                      <div>单价</div>
+                      <div>数量</div>
+                      <div style="text-align:right">总价</div>
+                    </div>
+                    <div class="wel-main">
+                      <div class="wei-item" v-for="item in buyOrder" :key="item.id">
+                        <div>{{item.price}}</div>
+                        <div>
+                          <img :src="Coin(item.pair)" class="order-coin" />
+                          <span>{{item.num}}</span>
+                        </div>
+                        <div style="text-align:right">$ {{item.total}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </el-scrollbar>
+              </scroll-container>
+            </el-card>
+          </el-col>
+          <el-col :span="11" style="margin-top:15px">
+            <el-card :body-style="{paddingTop:0}">
+              <div slot="header">
+                <span class="card-title">卖单</span>
               </div>
-            </div>
-            <div class="eachart-box">
-              <v-chart :options="options" />
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-  </div>
+              <scroll-container height="360px">
+                <el-scrollbar style="height:100%" wrap-class="default-scrollbar__wrap">
+                  <div class="wel-table">
+                    <div class="table-title">
+                      <div>单价</div>
+                      <div>数量</div>
+                      <div style="text-align:right">总价</div>
+                    </div>
+                    <div class="wel-main">
+                      <div class="wei-item" v-for="item in sellOrder" :key="item.id">
+                        <div>{{item.price}}</div>
+                        <div>
+                          <img :src="Coin(item.pair)" class="order-coin" />
+                          <span>{{item.num}}</span>
+                        </div>
+                        <div style="text-align:right">$ {{item.total}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </el-scrollbar>
+              </scroll-container>
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
+    </el-scrollbar>
+  </scroll-container>
 </template>
 
 <script>
 var time = null
-import { getHomeDate, dealsRecord } from '@/api'
+var timestamp = 10
+import { getHomeDate, dealsRecord, platformOrderList, refuseOrder } from '@/api'
+import { formatDate } from '@/utils/formatDate'
 import ScrollInline from '@/components/ScrollInline'
-import echarts from 'echarts'
+import ECharts from '@/components/ECharts'
+import ScrollContainer from '@/components/ScrollContainer'
+
 export default {
+  filters: {
+    capitalizeFee(str) {
+      return isNaN(str * 1) ? str : (str * 1).toFixed(4)
+    },
+  },
   components: {
     ScrollInline,
+    ECharts,
+    ScrollContainer,
   },
   data() {
     return {
       list: [],
       options: {
         backgroundColor: '#ffffff',
-        title: {
-          show: false,
-          text: '哎呦,不错哦',
-          textStyle: {
-            color: '#454545',
-            fontSize: 20,
-          },
-          top: '0',
-          left: 'left',
-        },
         legend: {
           type: 'plain',
           right: '2%',
         },
         tooltip: {
           trigger: 'axis',
+          show: false,
           axisPointer: {
             lineStyle: {
               color: {
@@ -200,7 +357,7 @@ export default {
         ],
         series: [
           {
-            name: '注册总量',
+            name: '成交量',
             type: 'line',
             smooth: true, //是否平滑
             showAllSymbol: true,
@@ -231,14 +388,20 @@ export default {
               shadowOffsetX: 2,
             },
             tooltip: {
-              show: true,
+              show: false,
             },
             data: [281.55, 398.35, 214.02, 179.55, 289.57, 356.14],
           },
         ],
       },
-      curryIndex1: 0,
-      curryIndex2: 0,
+      currentIndex1: 0,
+      currentIndex2: 0,
+      loading: true,
+      hasKData: true,
+      orderList: [],
+      orderActive: [],
+      buyOrder: [],
+      sellOrder: [],
     }
   },
   computed: {
@@ -250,20 +413,144 @@ export default {
     list1() {
       return this.list.length == 0 ? [] : this.handleSetList1(this.list)
     },
+    currentItem() {
+      return this.list1.length
+        ? this.list1[this.currentIndex1][this.currentIndex2]
+        : ''
+    },
+    isCurrentUp() {
+      return (item) => {
+        return item.percent_change * 1 >= 0
+      }
+    },
+    Coin() {
+      return (coin) => {
+        coin = coin.toUpperCase()
+        return require(`@/assets/img/coin-icon/${coin}.png`)
+      }
+    },
   },
   watch: {
     currentItem(val) {
-      this.handleClickItem2(val)
+      if (val) {
+        this.getChartData(val)
+      }
     },
   },
   created() {
     this.getHomeDate()
     time = setInterval(() => {
-      this.getHomeDate()
-    }, 10000)
+      timestamp--
+      if (timestamp == 0) {
+        this.getHomeDate()
+        timestamp = 10
+      }
+    }, 1000)
+    this.getHistoryOrder()
+    this.getActiveOrder()
+    this.getSellOrder()
+    this.getBuyOrder()
   },
-
+  beforeDestroy() {
+    clearInterval(time)
+  },
   methods: {
+    // 获取历史订单
+    getHistoryOrder() {
+      const data = {
+        email: '',
+        endTime: '',
+        is_deal_type: 0,
+        limit: 100,
+        page: 1,
+        pair: '',
+        startTime: '',
+        status: 1,
+        type: -1,
+      }
+      platformOrderList(data).then((res) => {
+        if (res.code == 200) {
+          this.orderList = res.data.data
+        }
+      })
+    },
+    // 获取当前订单
+    getActiveOrder() {
+      const data = {
+        email: '',
+        endTime: '',
+        is_deal_type: 0,
+        limit: 100,
+        page: 1,
+        pair: '',
+        startTime: '',
+        status: 0,
+        type: -1,
+      }
+      platformOrderList(data).then((res) => {
+        if (res.code == 200) {
+          this.orderActive = res.data.data
+        }
+      })
+    },
+    // 获取买订单
+    getBuyOrder() {
+      const data = {
+        email: '',
+        endTime: '',
+        is_deal_type: 0,
+        limit: 100,
+        page: 1,
+        pair: '',
+        startTime: '',
+        status: -1,
+        type: 0,
+      }
+      platformOrderList(data).then((res) => {
+        if (res.code == 200) {
+          this.buyOrder = res.data.data
+        }
+      })
+    },
+    // 获取卖订单
+    getSellOrder() {
+      const data = {
+        email: '',
+        endTime: '',
+        is_deal_type: 0,
+        limit: 100,
+        page: 1,
+        pair: '',
+        startTime: '',
+        status: -1,
+        type: 1,
+      }
+      platformOrderList(data).then((res) => {
+        if (res.code == 200) {
+          this.sellOrder = res.data.data
+        }
+      })
+    },
+    // 取消订单
+    cancelOrder(id) {
+      this.$confirm('是否取消订单?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          refuseOrder(id).then((res) => {
+            if (res.code == 200) {
+              this.$message({
+                type: 'success',
+                message: res.msg,
+              })
+              this.getActiveOrder()
+            }
+          })
+        })
+        .catch((err) => err)
+    },
     getHomeDate() {
       getHomeDate().then((res) => {
         if (res.code == 200) {
@@ -275,6 +562,7 @@ export default {
             }
           })
           this.list = list
+          this.loading = false
         }
       })
     },
@@ -286,20 +574,51 @@ export default {
       return arr
     },
     // 点击顶部的card触发
-    handleClickItem2(item) {
-      console.log('开始请求图表')
+    handleClickItem2(i1, i2) {
+      this.currentIndex1 = i1
+      this.currentIndex2 = i2
+      timestamp = 10
+    },
+    getChartData(item = { coin: 'BTC' }) {
+      const now_Date = Math.floor(new Date().getTime() / 1000)
+      const old_Date = now_Date - 86400
+      const data = {
+        instrument_id: item.coin.toLowerCase() + '-USD',
+        start: new Date(old_Date * 1000),
+        end: new Date(),
+        granularity: 7200,
+      }
+      dealsRecord(data).then((res) => {
+        if (res.code == 200) {
+          if (!(res.data instanceof Array)) {
+            this.hasKData = false
+            return
+          }
+          this.hasKData = true
+          let list = res.data.reverse()
+          const XData = [],
+            YData = []
+          list.forEach((item) => {
+            XData.push(formatDate(new Date(item[0]), 'dd日 hh:mm'))
+            YData.push(item[5])
+          })
+          this.options.series[0].data = YData
+          this.options.xAxis[0].data = XData
+          this.$nextTick(() => {
+            this.$refs.chart.setOptions(this.options)
+          })
+        }
+      })
     },
   },
 }
 </script>
 
 <style scoped>
-.welcome {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  line-height: 40px;
-  height: 50vh;
+.container {
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
 }
 .welcome h2 {
   font-size: 40px;
@@ -394,5 +713,109 @@ export default {
 .eachart-box {
   height: 350px;
   flex: 0.85;
+}
+.current-img {
+  width: 20px;
+  height: 20px;
+  vertical-align: -2px;
+}
+.noKData {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+}
+.table-title {
+  color: #607d8b;
+  height: 50px;
+  line-height: 50px;
+  display: flex;
+  font-size: 14px;
+  font-weight: 700;
+  border-top: 1px solid #eee;
+}
+.table-title > div {
+  flex: 1;
+}
+.wel-table {
+  padding-right: 10px;
+}
+.wei-item {
+  font-size: 14px;
+  height: 50px;
+  line-height: 50px;
+  border-top: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  color: #607d8b;
+}
+.wei-item > div {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.buy-color {
+  color: #28a745;
+}
+.sell-color {
+  color: #dc3545;
+}
+.order-coin {
+  width: 15px;
+  height: 15px;
+  background-color: #fff;
+  vertical-align: -3px;
+  margin-right: 5px;
+}
+.t-data {
+  flex: 0.2 !important;
+}
+.t-type {
+  flex: 0.1 !important;
+}
+.t-number {
+  flex: 0.17 !important;
+}
+.t-remain {
+  flex: 0.17 !important;
+}
+.t-price {
+  flex: 0.1 !important;
+}
+.t-usd {
+  flex: 0.12 !important;
+}
+.t-fee {
+  flex: 0.12 !important;
+}
+.t-cancel {
+  flex: 0.08 !important;
+  text-align: right;
+}
+.btn-cancel {
+  color: #ef5350;
+  vertical-align: 1px;
+  user-select: none;
+  border: 1px solid;
+  background-color: transparent;
+  border-color: #ef5350;
+  box-shadow: 0 2px 2px 0 rgba(239, 83, 80, 0.14),
+    0 3px 1px -2px rgba(239, 83, 80, 0.2), 0 1px 5px 0 rgba(239, 83, 80, 0.12);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 12px;
+  border-radius: 5px;
+}
+.btn-cancel:hover {
+  background: #ef5350;
+  border-color: #ef5350;
+  color: #fff;
+  box-shadow: 0 14px 26px -12px rgba(239, 83, 80, 0.42),
+    0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(239, 83, 80, 0.2);
 }
 </style>
