@@ -2,9 +2,9 @@ import { allRouters, permission1, permission2 } from '@/config/router'
 
 export function handleUserPath(ruleNum) {
   switch (ruleNum) {
-    case 0:
+    case 0: // 代理
       return handleRules(permission2)
-    case 1:
+    case 1: // 总管理
       return handleRules(permission1)
   }
 }

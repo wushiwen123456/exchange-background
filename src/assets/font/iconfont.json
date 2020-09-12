@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "698159",
+      "name": "home page-Selected",
+      "font_class": "homepageselected",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
       "icon_id": "3092315",
       "name": "图表 上升趋势",
       "font_class": "tubiaoshangshengqushi",

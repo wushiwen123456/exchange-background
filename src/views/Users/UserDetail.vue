@@ -10,8 +10,22 @@
             <el-form-item label="UID：">
               <span>{{form.uid}}</span>
             </el-form-item>
-            <el-form-item label="用户名：">
-              <span>{{form.name}}</span>
+            <el-form-item label="推荐人：" v-if="isRight == 1 ">
+              <el-autocomplete
+                style="width:260px"
+                v-model="form.referrer"
+                :disabled="inviDisabled"
+                :fetch-suggestions="querySearchAsync"
+                :trigger-on-focus="false"
+              />
+              <span class="edit" v-if="inviDisabled" @click="inviDisabled = false">编辑</span>
+              <span class="edit" v-else @click="handleInviSave">
+                保存
+                <i v-if="inviteSaveLoading" class="el-icon-loading"></i>
+              </span>
+            </el-form-item>
+            <el-form-item label="推荐人：" v-if="isRight == 0">
+              <span>{{form.referrer}}</span>
             </el-form-item>
             <el-form-item label="邀请码：">
               <span>{{form.invitation}}</span>
@@ -104,9 +118,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ScrollContainer from '@/components/ScrollContainer'
 import * as cpns from './details'
-import { aPress } from '@/api'
+import { aPress, getUserByQuery, setUserInvite } from '@/api'
 
 export default {
   components: {
@@ -121,24 +136,69 @@ export default {
       ideLoading: false,
       addLoading: false,
       finLoading: false,
-
       perLoading1: false,
       ideLoading1: false,
       addLoading1: false,
       finLoading1: false,
       loading: false,
       name: '',
+      inviDisabled: true,
+      inviteItem: '',
+      inviteSaveLoading: false,
     }
   },
   computed: {
+    ...mapGetters(['isRight']),
     title() {
       return '用户资料'
     },
   },
   methods: {
+    // 用户名筛选
+    querySearchAsync(queryString, cb) {
+      getUserByQuery({ email: queryString }).then((res) => {
+        if (res.code == 200) {
+          let list = res.data
+          list = list.map((item) => {
+            return {
+              value: item.email,
+              id: item.id,
+            }
+          })
+          cb(list)
+        }
+      })
+    },
+    // 保存邀请人
+    handleInviSave() {
+      if (!this.form.referrer) {
+        return this.$message({
+          message: '没有该账号',
+          type: 'error',
+        })
+      }
+      this.inviteSaveLoading = true
+      const data = {
+        email: this.form.referrer,
+        id: this.form.id,
+      }
+      setUserInvite(data).then((res) => {
+        this.inviteSaveLoading = false
+        if (res.code == 200) {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+          })
+          this.inviDisabled = true
+        }
+      })
+    },
     open(item, name) {
       this.form = item
       this.name = name
+      this.inviteItem = ''
+      this.inviDisabled = true
+      this.inviteSaveLoading = false
       this.dialogVisible = true
     },
     close() {
@@ -316,5 +376,10 @@ export default {
 }
 .el-tag {
   margin-right: 15px;
+}
+.edit {
+  color: #409eff;
+  margin-left: 5px;
+  cursor: pointer;
 }
 </style>

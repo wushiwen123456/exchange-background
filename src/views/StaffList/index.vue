@@ -34,12 +34,6 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="业绩" align="center" min-width="150">
-          <template slot-scope="scope">
-            <div class="text-cut">{{scope.row.performance}}</div>
-          </template>
-        </el-table-column>
-
         <el-table-column label="注册时间" align="center" min-width="80">
           <template slot-scope="scope">
             <div class="text-cut">{{scope.row.created_at | capitalizeTime}}</div>
@@ -53,8 +47,8 @@
                 v-model="scope.row.status"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
-                :active-value="1"
-                :inactive-value="0"
+                :active-value="0"
+                :inactive-value="1"
                 @change="handleChange(scope.row)"
               ></el-switch>
             </el-tooltip>
@@ -68,7 +62,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center" min-width="170">
           <template slot-scope="scope">
-            <!-- <el-button type="danger" @click="handleRemove(scope.row.id)" size="mini">删除</el-button> -->
+            <el-button type="primary" @click="handleLookClient(scope.row)" size="mini">查看客户</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -183,7 +177,7 @@ export default {
   computed: {
     isFreeze() {
       return (status) => {
-        return status == 1 ? '正常使用' : '已冻结'
+        return status == 0 ? '正常使用' : '已冻结'
       }
     },
   },
@@ -222,6 +216,13 @@ export default {
             message: res.msg,
           })
         }
+      })
+    },
+    handleLookClient(row) {
+      const email = row.email
+      this.$router.push({
+        path: '/userList',
+        query: { email },
       })
     },
     refresh() {

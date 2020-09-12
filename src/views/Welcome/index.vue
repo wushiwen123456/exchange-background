@@ -156,12 +156,12 @@
                         </div>
                         <div class="t-remain">
                           <img :src="Coin(item.pair)" class="order-coin" />
-                          <span>{{item.num}}</span>
+                          <span>{{item.surplus_num}}</span>
                         </div>
                         <div class="t-price">{{item.price}}</div>
                         <div class="t-usd">{{item.price}}</div>
                         <div class="t-fee">{{item.fee | capitalizeFee}}</div>
-                        <div class="t-cancel">
+                        <div class="t-cancel" v-if="isRight == 1">
                           <span @click="cancelOrder(item.id)" class="btn-cancel btn-sm">取消</span>
                         </div>
                       </div>
@@ -238,6 +238,7 @@
 <script>
 var time = null
 var timestamp = 10
+import { mapGetters } from 'vuex'
 import { getHomeDate, dealsRecord, platformOrderList, refuseOrder } from '@/api'
 import { formatDate } from '@/utils/formatDate'
 import ScrollInline from '@/components/ScrollInline'
@@ -405,6 +406,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['isRight']),
     isTop() {
       return (per) => {
         return per * 1 >= 0

@@ -63,7 +63,7 @@
           ></el-date-picker>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" icon="el-icon-edit" @click="getList">查询</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="handleQuery">查询</el-button>
         </el-col>
       </el-row>
 
@@ -102,7 +102,7 @@
         </el-table-column>
         <el-table-column label="剩余数量" align="center" prop="addTime" min-width="110">
           <template slot-scope="scope">
-            <div class="text-cut">{{scope.row.remain}}</div>
+            <div class="text-cut">{{scope.row.surplus_num}}</div>
           </template>
         </el-table-column>
         <el-table-column label="状态" align="center" min-width="90">
@@ -123,15 +123,8 @@
             <div class="text-cut">{{scope.row.creation_at | capitalizeTime}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" min-width="170">
+        <el-table-column v-if="isRight == 1" label="操作" align="center" min-width="170">
           <template slot-scope="scope">
-            <el-button
-              v-if="scope.row.status == 0"
-              type="primary"
-              @click="handlePass(scope.row.id)"
-              size="mini"
-            >通过</el-button>
-            <el-button v-if="scope.row.status != 0" type="info" size="mini">通过</el-button>
             <el-button
               v-if="scope.row.status == 0"
               type="warning"
@@ -165,6 +158,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import {
   currencys,
   platformOrderList,
@@ -241,6 +235,9 @@ export default {
       ],
       loading: true,
     }
+  },
+  computed: {
+    ...mapGetters(['isRight']),
   },
   created() {
     this.getList()
@@ -337,7 +334,11 @@ export default {
         }
       })
     },
-    // 交易拒绝
+    // 点击查询
+    handleQuery() {
+      this.listQuery.page = 1
+      this.getList()
+    },
   },
 }
 </script>

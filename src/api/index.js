@@ -345,11 +345,101 @@ export function getHomeDate() {
     method: 'get'
   })
 }
+
 // 获取近期交易记录
 export function dealsRecord(data) {
   return request({
     url: 'home/k_line',
     method: 'get',
     params: data
+  })
+}
+
+// 修改用户资产
+export function userAssetsChange(data) {
+  return request({
+    url: '/adminUser/assetEdit',
+    method: 'post',
+    data
+  })
+}
+
+// 模糊查询，根据关键字获取用户
+export function getUserByQuery(data) {
+  return request({
+    url: 'adminUser/dimUser',
+    method: 'get',
+    params: data
+  })
+}
+
+// 修改用户邀请
+export function setUserInvite(data) {
+  return request({
+    url: 'adminUser/editUserInviter',
+    method: 'get',
+    params: data
+  })
+}
+
+// 所有币种列表
+export function getAllagencyList(data) {
+  return request({
+    url: '/adminUser/randNumList',
+    method: 'get',
+    params: data
+  })
+}
+
+// 所有币种列表编辑
+export function editAllGencyList(data) {
+  return request({
+    url: '/adminUser/editRandList',
+    method: 'get',
+    params: data
+  })
+}
+
+// 获取最小提笔金额
+export function getMinWithdraw(){
+  return request({
+    url:'adminUser/GetSettingConfig',
+    method:'get'  
+  })
+}
+
+// 保存最小金额
+export function setMinWithdraw(data){
+  return request({
+    url:'adminUser/updateSettingConfig',
+    method:'get',
+    params:data
+  })
+}
+
+// 获取轮播图
+export function getBanner(data){
+  return request({
+    url:'adminUser/getBanner',
+    method:'get',
+    params:data
+  })
+}
+
+// 保存轮播图
+export function setBanner(data){
+  return request({
+    url:'adminUser/updataBanner',
+    method:'post',
+    data
+  })
+}
+
+// banner删除
+export function delBanner(data){
+  return request({
+    url:'adminUser/delBanner',
+    method:'get',
+    params:data
   })
 }

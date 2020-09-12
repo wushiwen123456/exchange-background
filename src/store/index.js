@@ -13,7 +13,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     Authorization: window.localStorage.getItem('Authorization-bgSafex'),
-    userRouters: []
+    userRouters: [],
+    right: '' //
   },
   mutations: {
     // 保存token
@@ -29,11 +30,16 @@ export default new Vuex.Store({
     // 保存用户路由
     setUserRouters(state, data) {
       state.userRouters = data
+    },
+    // 保存用户权限
+    setRight(state, data) {
+      state.right = data
     }
   },
   getters: {
     loginStatus: state => state.Authorization,
-    isUserRouter: state => state.userRouters
+    isUserRouter: state => state.userRouters,
+    isRight: state => state.right
   },
   actions: {
     login({ commit }, payload) {
@@ -52,6 +58,7 @@ export default new Vuex.Store({
         const res = await getUserMenus(state.Authorization)
         if (res.code == 200) {
           const { data } = res
+          commit('setRight', data)
           const list = handleUserPath(data)
           commit('setUserRouters', list)
           return list

@@ -63,7 +63,7 @@
           ></el-date-picker>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" icon="el-icon-edit" @click="getList">查询</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="handleQuery">查询</el-button>
         </el-col>
       </el-row>
 
@@ -85,13 +85,19 @@
 
         <el-table-column label="钱包地址" align="center" min-width="170">
           <template slot-scope="scope">
-            <div class="text-cut">{{scope.row.address}}</div>
+            <div>{{scope.row.address}}</div>
           </template>
         </el-table-column>
 
         <el-table-column label="数量" align="center" prop="addTime" min-width="140">
           <template slot-scope="scope">
             <div class="text-cut">{{scope.row.amount}}</div>
+          </template>
+        </el-table-column>
+
+         <el-table-column label="估值" align="center" prop="addTime" min-width="140">
+          <template slot-scope="scope">
+            <div class="text-cut">{{scope.row.probably}}</div>
           </template>
         </el-table-column>
 
@@ -117,7 +123,7 @@
             <div class="text-cut">{{scope.row.created_at | capitalizeTime}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" min-width="170">
+        <el-table-column v-if="isRight == 1" label="操作" align="center" min-width="170">
           <template slot-scope="scope">
             <div v-if="orderStatus(scope.row)">
               <el-button type="success" @click="handlePass(scope.row.id)" size="mini">通过</el-button>
@@ -146,6 +152,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { currencys, getAssetsList, AssetsOpera } from '@/api'
 export default {
   filters: {
@@ -217,6 +224,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['isRight']),
     orderStatus() {
       return (row) => {
         return row.type == 1 && row.status == 4
@@ -306,6 +314,10 @@ export default {
           this.getList()
         }
       })
+    },
+    handleQuery() {
+      this.listQuery.page = 1
+      this.getList()
     },
   },
 }

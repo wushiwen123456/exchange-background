@@ -14,26 +14,26 @@
               class="tips"
             >* 1 {{form.name}} = {{form.price}} USDT (以实际浮动后的价格为准),精确到小数点后4位</span>
           </el-form-item>
-          <el-form-item label="上浮率：" prop="top_price">
+          <!-- <el-form-item label="上浮率：" prop="top_price">
             <el-input v-model="form.top_price" placeholder="请输入币种上浮率" class="text-input"></el-input>
             <span class="tips">* 单位:%,精确到小数点后4位</span>
           </el-form-item>
           <el-form-item label="下浮率：" prop="down_price">
             <el-input v-model="form.down_price" placeholder="请输入币种下浮率" class="text-input"></el-input>
             <span class="tips">* 单位:%,精确到小数点后4位</span>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="手续费：" prop="fee">
             <el-input v-model="form.fee" placeholder="请输入交易手续费" class="text-input"></el-input>
             <span class="tips">* 单位:USDT,精确到小数点后4位</span>
           </el-form-item>
-          <el-form-item label="最大值：" prop="max">
+          <!-- <el-form-item label="最大值：" prop="max">
             <el-input v-model="form.max" placeholder="请输入价格最大值" class="text-input"></el-input>
             <span class="tips">* 订单数量的最大值,精确到个位数</span>
           </el-form-item>
           <el-form-item label="最小值：" prop="min">
             <el-input v-model="form.min" placeholder="请输入价格最小值" class="text-input"></el-input>
             <span class="tips">* 订单数量的最小值,精确到个位数</span>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="可控范围：" prop="scope">
             <el-input v-model="form.scope" placeholder="请输入可控范围" class="text-input"></el-input>
             <span class="tips">* 控制价格上下浮动的范围,精确到小数点后4位</span>
@@ -86,27 +86,15 @@ export default {
       form: {
         name: '',
         price: '',
-        top_price: '',
-        down_price: '',
         fee: 0.1,
-        max: '',
-        min: '',
         scope: 5.4,
         status: 1,
       },
-      title: '添加币种',
+      title: '添加代币',
       rules: {
         name: [{ required: true, validator: validateName, trigger: 'blur' }],
         price: [{ required: true, message: '请输入价格', trigger: 'blur' }],
-        top_price: [
-          { required: true, message: '请输入上浮率', trigger: 'blur' },
-        ],
-        down_price: [
-          { required: true, message: '请输入下浮率', trigger: 'blur' },
-        ],
         fee: [{ required: true, message: '请输入手续费', trigger: 'blur' }],
-        max: [{ required: true, message: '请输入最大值', trigger: 'blur' }],
-        min: [{ required: true, message: '请输入最小值', trigger: 'blur' }],
         scope: [{ required: true, message: '请输入可控范围', trigger: 'blur' }],
       },
     }
@@ -116,10 +104,10 @@ export default {
       if (row) {
         // 编辑
         this.form = Object.assign({}, row)
-        this.title = '编辑币种'
+        this.title = '编辑代币'
       } else {
         // 添加
-        this.title = '添加币种'
+        this.title = '添加代币'
         this.form = {
           name: '',
           price: '',

@@ -25,7 +25,7 @@
           </el-select>
         </el-col>
         <el-col :xs="20" :sm="19" :md="3" :lg="2" :xl="2" class="col query">
-          <el-button type="primary" icon="el-icon-edit" @click="getList">查询</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="handleQuery">查询</el-button>
         </el-col>
         <el-col
           :xs="8"
@@ -80,18 +80,13 @@
                 v-model="scope.row.status"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
-                :active-value="1"
-                :inactive-value="0"
+                :active-value="0"
+                :inactive-value="1"
               ></el-switch>
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" min-width="170">
-          <template slot-scope="scope">
-            <!-- <el-button type="warning" @click="addAgency(scope.row)" size="mini">编辑</el-button>
-            <el-button type="danger" @click="handleRemove(scope.row.id)" size="mini">删除</el-button>-->
-          </template>
-        </el-table-column>
+        <el-table-column label="操作" align="center" min-width="170"></el-table-column>
       </el-table>
       <div class="footer">
         <el-pagination
@@ -184,7 +179,7 @@ export default {
   computed: {
     isFreeze() {
       return (status) => {
-        return status == 1 ? '正常使用' : '已冻结'
+        return status == 0 ? '正常使用' : '已冻结'
       }
     },
   },
@@ -207,7 +202,7 @@ export default {
         this.loading = false
         if (res.code == 200) {
           this.list = res.data.data
-          this.total = res.total
+          this.total = res.data.total
         }
       })
     },
@@ -249,6 +244,11 @@ export default {
           })
         })
         .catch(() => {})
+    },
+    // 查询
+    handleQuery() {
+      this.listQuery.page = 1
+      this.getList()
     },
   },
 }

@@ -14,16 +14,6 @@
         <el-table-column width="50" align="center" label="ID" prop="id"></el-table-column>
         <el-table-column label="币种" align="center" prop="title"></el-table-column>
         <el-table-column label="转出地址" align="center" prop="value"></el-table-column>
-        <el-table-column label="交易手续费" align="center">
-          <template slot-scope="scope">
-            <div class="text-cut">{{scope.row.deal_server + '%'}}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="提现手续费" align="center">
-          <template slot-scope="scope">
-            <div class="text-cut">{{scope.row.extract_serve + '%'}}</div>
-          </template>
-        </el-table-column>
         <el-table-column label="操作" align="center" width="150px">
           <template slot-scope="scope">
             <el-button
@@ -44,12 +34,6 @@
         </el-form-item>
         <el-form-item label="转出地址" prop="value">
           <el-input v-model="editForm.value"></el-input>
-        </el-form-item>
-        <el-form-item label="交易手续费" prop="deal_server">
-          <el-input v-model="editForm.deal_server"></el-input>
-        </el-form-item>
-        <el-form-item label="提现手续费" prop="extract_serve">
-          <el-input v-model="editForm.extract_serve"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

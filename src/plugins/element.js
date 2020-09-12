@@ -33,7 +33,8 @@ import {
   MessageBox,
   Radio,
   Carousel,
-  CarouselItem
+  CarouselItem,
+  Upload
 } from 'element-ui'
 
 Vue.prototype.$message = Message
@@ -73,3 +74,4 @@ Vue.use(Autocomplete)
 Vue.use(Radio)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
+Vue.use(Upload)

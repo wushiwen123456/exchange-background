@@ -30,7 +30,6 @@
               <!-- 一级菜单模板区域 -->
               <template slot="title">
                 <!-- 图标 -->
-                <!-- <i :class="iconObj[item.id]"></i> -->
                 <i :class="['iconfont',item.icon]"></i>
                 <!-- 文本 -->
                 <span>{{item.authName}}</span>
@@ -66,19 +65,7 @@ export default {
     return {
       isCollapse: false,
       activePath: '',
-      menuList: [],
-      iconObj: {
-        '10000': 'iconfont icon-group_fill',
-        '20000': 'iconfont icon-shangpin',
-        '30000': 'iconfont icon-liping',
-        '40000': 'iconfont icon-guige',
-        '50000': 'iconfont icon-banyunfei',
-        '60000': 'iconfont icon-dingdan',
-        '70000': 'iconfont icon-store',
-        '80000': 'iconfont icon-guanggao',
-        '90000': 'iconfont icon-RectangleCopy',
-        '100000': 'iconfont icon-caiwu',
-      },
+      menuList: []
     }
   },
   computed: {

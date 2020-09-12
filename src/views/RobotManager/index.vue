@@ -13,7 +13,7 @@
     >
       <div class="form-con form1">
         <el-switch
-          v-model="form.status"
+          v-model="form.robot_status"
           active-text="启动自动下单任务"
           inactive-text="停止自动下单任务"
           active-color="#13ce66"
@@ -56,9 +56,15 @@
               <el-form-item label="币种比例：" prop="price">
                 <el-input v-model="form.price"></el-input>
               </el-form-item>
+              <el-form-item label="手续费：" prop="fee">
+                <el-input v-model="form.fee"></el-input>
+              </el-form-item>
+              <el-form-item label="收盘价：" prop="fee">
+                <el-input v-model="form.close_price"></el-input>
+              </el-form-item>
             </el-form>
           </div>
-          <div class="form-con">
+          <!-- <div class="form-con">
             <h3 class="form-title">调控参数</h3>
             <el-form :model="form" inline :rules="rules" label-width="auto" ref="form3">
               <el-form-item label="k线趋势" prop="type" style="width:100%">
@@ -86,7 +92,7 @@
                 <span title="当在不可控范围之后，将启用调控下单" class="el-icon-warning tips"></span>
               </el-form-item>
             </el-form>
-          </div>
+          </div>-->
         </el-scrollbar>
       </scroll-container>
     </el-card>
@@ -127,35 +133,18 @@ export default {
     }
     return {
       form: {
-        status: 0,
-        email: '1131634405@qq.com',
-        name: 'DAM_USDT',
-        price: 1.15,
-        top_price: '0.01',
-        down_price: '0.01',
+        robot_status: 0,
+        email: '',
+        name: '',
+        price: 0,
         fee: '0.01',
-        max: '0.01',
-        min: '0.01',
-        scope: '0.01',
-        type: '0',
+        close_price: '',
       },
       rules: {
         email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
         name: [{ required: true, message: '请输入币种', trigger: 'blur' }],
-        scope: [
-          { required: true, message: '请输入正常可控范围', trigger: 'blur' },
-        ],
         price: [{ required: true, message: '请输入币种比例', trigger: 'blur' }],
-        top_price: [
-          { required: true, message: '请输入上浮数值', trigger: 'blur' },
-        ],
-        down_price: [
-          { required: true, message: '请输入下浮数值', trigger: 'blur' },
-        ],
-        max: [{ required: true, message: '请输入最大值', trigger: 'blur' }],
-        min: [{ required: true, message: '请输入最小值', trigger: 'blur' }],
         fee: [{ required: true, message: '请输入手续费', trigger: 'blur' }],
-        type: [{ required: true, message: '请选择k线趋势', trigger: 'blur' }],
       },
       loading: true,
       setStatus: false,
@@ -183,8 +172,8 @@ export default {
       try {
         const value1 = await this.$refs.form1.validate()
         const value2 = await this.$refs.form2.validate()
-        const value3 = await this.$refs.form3.validate()
         this.setStatus = true
+        console.log(this.form)
         setRobotConfig(this.form).then((res) => {
           this.setStatus = false
           if (res.code == 200) {
@@ -194,7 +183,9 @@ export default {
             })
           }
         })
-      } catch (error) {}
+      } catch (error) {
+        console.log(error)
+      }
     },
     getRobotConfig() {
       this.loading = true
@@ -204,8 +195,6 @@ export default {
         }, 500)
         if (res.code == 200) {
           const form = res.data
-          form.type = form.type + ''
-          form.status = res.data.robot_status
           this.form = Object.assign({}, form)
         }
       })

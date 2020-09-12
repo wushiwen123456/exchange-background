@@ -14,7 +14,7 @@
           <el-input v-model="listQuery.title" class="title-input" placeholder="文章名称"></el-input>
         </el-col>
         <el-col :xs="4" :sm="4" :md="3" :lg="2" :xl="2" class="col query">
-          <el-button type="primary" icon="el-icon-edit" @click="getList">查询</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="handleQuery">查询</el-button>
         </el-col>
         <el-col
           :xs="20"
@@ -186,6 +186,10 @@ export default {
           })
         }
       })
+    },
+    handleQuery() {
+      this.listQuery.page = 1
+      this.getList()
     },
   },
 }

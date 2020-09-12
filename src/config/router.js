@@ -53,26 +53,26 @@ const allRouters = [
         pid: '30000',
         icon: 'icon-jiaoyisuo'
       },
-      {
-        path: '/userPermissList',
-        name: 'UserPermissList',
-        authName: '角色列表',
-        cid: '60001',
-        parentsPath: 'norms',
-        parentsName: '权限管理',
-        pid: '60000',
-        icon: 'icon-quanxian'
-      },
-      {
-        path: '/permissList',
-        name: 'PermissList',
-        authName: '权限列表',
-        cid: '60002',
-        parentsPath: 'norms',
-        parentsName: '权限管理',
-        pid: '60000',
-        icon: 'icon-quanxian'
-      },
+      // {
+      //   path: '/userPermissList',
+      //   name: 'UserPermissList',
+      //   authName: '角色列表',
+      //   cid: '60001',
+      //   parentsPath: 'norms',
+      //   parentsName: '权限管理',
+      //   pid: '60000',
+      //   icon: 'icon-quanxian'
+      // },
+      // {
+      //   path: '/permissList',
+      //   name: 'PermissList',
+      //   authName: '权限列表',
+      //   cid: '60002',
+      //   parentsPath: 'norms',
+      //   parentsName: '权限管理',
+      //   pid: '60000',
+      //   icon: 'icon-quanxian'
+      // },
       {
         path: '/agentList',
         name: 'AgentList',
@@ -192,16 +192,16 @@ const permission1 = [
         pid: '20000',
         icon: 'icon-caiwu'
       },
-      {
-        path: '/mtr',
-        name: 'Mtr',
-        authName: '市价交易记录',
-        cid: '30001',
-        parentsPath: 'gift',
-        parentsName: '交易管理',
-        pid: '30000',
-        icon: 'icon-jiaoyisuo'
-      },
+      // {
+      //   path: '/mtr',
+      //   name: 'Mtr',
+      //   authName: '市价交易记录',
+      //   cid: '30001',
+      //   parentsPath: 'gift',
+      //   parentsName: '交易管理',
+      //   pid: '30000',
+      //   icon: 'icon-jiaoyisuo'
+      // },
       {
         path: '/ptr',
         name: 'Ptr',
@@ -212,26 +212,26 @@ const permission1 = [
         pid: '30000',
         icon: 'icon-jiaoyisuo'
       },
-      {
-        path: '/userPermissList',
-        name: 'UserPermissList',
-        authName: '角色列表',
-        cid: '60001',
-        parentsPath: 'norms',
-        parentsName: '权限管理',
-        pid: '60000',
-        icon: 'icon-quanxian'
-      },
-      {
-        path: '/permissList',
-        name: 'PermissList',
-        authName: '权限列表',
-        cid: '60002',
-        parentsPath: 'norms',
-        parentsName: '权限管理',
-        pid: '60000',
-        icon: 'icon-quanxian'
-      },
+      // {
+      //   path: '/userPermissList',
+      //   name: 'UserPermissList',
+      //   authName: '角色列表',
+      //   cid: '60001',
+      //   parentsPath: 'norms',
+      //   parentsName: '权限管理',
+      //   pid: '60000',
+      //   icon: 'icon-quanxian'
+      // },
+      // {
+      //   path: '/permissList',
+      //   name: 'PermissList',
+      //   authName: '权限列表',
+      //   cid: '60002',
+      //   parentsPath: 'norms',
+      //   parentsName: '权限管理',
+      //   pid: '60000',
+      //   icon: 'icon-quanxian'
+      // },
       {
         path: '/agentList',
         name: 'AgentList',
@@ -265,8 +265,18 @@ const permission1 = [
       {
         path: '/coinList',
         name: 'CoinList',
-        authName: '币种列表',
+        authName: '代币列表',
         cid: '80001',
+        parentsPath: 'coin',
+        parentsName: '币种管理',
+        pid: '80000',
+        icon: 'icon-btc'
+      },
+      {
+        path: '/allCoinList',
+        name: 'AllCoinList',
+        authName: '币种列表',
+        cid: '80002',
         parentsPath: 'coin',
         parentsName: '币种管理',
         pid: '80000',
@@ -293,25 +303,45 @@ const permission1 = [
         icon: 'icon-16'
       },
       {
-        path: '/robotOrder',
-        name: 'RobotOrder',
-        authName: '机器人订单',
+        path: '/homeConfig',
+        name: 'HomeConfig',
+        authName: '首页设置',
         cid: '100001',
-        parentsPath: 'robot',
-        parentsName: '交易机器人',
+        parentsPath: 'homeConfig',
+        parentsName: '首页管理',
         pid: '100000',
-        icon: 'icon-robot'
+        icon: 'icon-homepageselected'
       },
       {
-        path: '/robotManager',
-        name: 'RobotManager',
-        authName: '机器人配置',
-        cid: '100002',
-        parentsPath: 'robot',
-        parentsName: '交易机器人',
-        pid: '100000',
-        icon: 'icon-robot'
+        path: '/otherConfig',
+        name: 'OtherConfig',
+        authName: '其他',
+        cid: '110001',
+        parentsPath: 'otherConfig',
+        parentsName: '其他设置',
+        pid: '110000',
+        icon: 'icon-shezhi'
       }
+      // {
+      //   path: '/robotOrder',
+      //   name: 'RobotOrder',
+      //   authName: '机器人订单',
+      //   cid: '100001',
+      //   parentsPath: 'robot',
+      //   parentsName: '交易机器人',
+      //   pid: '100000',
+      //   icon: 'icon-robot'
+      // },
+      // {
+      //   path: '/robotManager',
+      //   name: 'RobotManager',
+      //   authName: '机器人配置',
+      //   cid: '100002',
+      //   parentsPath: 'robot',
+      //   parentsName: '交易机器人',
+      //   pid: '100000',
+      //   icon: 'icon-robot'
+      // }
     ]
   }
 ]
@@ -351,16 +381,16 @@ const permission2 = [
         pid: '20000',
         icon: 'icon-caiwu'
       },
-      {
-        path: '/mtr',
-        name: 'Mtr',
-        authName: '市价交易记录',
-        cid: '30001',
-        parentsPath: 'gift',
-        parentsName: '交易管理',
-        pid: '30000',
-        icon: 'icon-jiaoyisuo'
-      },
+      // {
+      //   path: '/mtr',
+      //   name: 'Mtr',
+      //   authName: '市价交易记录',
+      //   cid: '30001',
+      //   parentsPath: 'gift',
+      //   parentsName: '交易管理',
+      //   pid: '30000',
+      //   icon: 'icon-jiaoyisuo'
+      // },
       {
         path: '/ptr',
         name: 'Ptr',

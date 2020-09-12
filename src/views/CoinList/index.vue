@@ -3,7 +3,7 @@
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>币种管理</el-breadcrumb-item>
-      <el-breadcrumb-item>币种列表</el-breadcrumb-item>
+      <el-breadcrumb-item>代币列表</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- 卡片视图区 -->
@@ -14,7 +14,7 @@
           <el-input v-model="listQuery.coin" class="title-input" placeholder="币种名称"></el-input>
         </el-col>
         <el-col :xs="4" :sm="4" :md="3" :lg="2" :xl="2" class="col query">
-          <el-button type="primary" icon="el-icon-edit" @click="getList">查询</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="handleQuery">查询</el-button>
         </el-col>
         <el-col
           :xs="20"
@@ -42,7 +42,7 @@
             <div class="text-cut">{{scope.row.price}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="上浮率" align="center" min-width="150">
+        <!-- <el-table-column label="上浮率" align="center" min-width="150">
           <template slot-scope="scope">
             <div class="text-cut">{{scope.row.top_price + '%'}}</div>
           </template>
@@ -51,13 +51,13 @@
           <template slot-scope="scope">
             <div class="text-cut">{{scope.row.down_price + '%'}}</div>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="手续费(USDT)" align="center" min-width="150">
           <template slot-scope="scope">
             <div class="text-cut">{{scope.row.fee}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="最大值" align="center" min-width="150">
+        <!-- <el-table-column label="最大值" align="center" min-width="150">
           <template slot-scope="scope">
             <div class="text-cut">{{scope.row.max}}</div>
           </template>
@@ -66,7 +66,7 @@
           <template slot-scope="scope">
             <div class="text-cut">{{scope.row.min}}</div>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="可控范围" align="center" min-width="150">
           <template slot-scope="scope">
             <div class="text-cut">{{scope.row.scope}}</div>
@@ -183,6 +183,10 @@ export default {
     // 编辑
     handleEdit(row) {
       this.$refs.addagency.open(row)
+    },
+    handleQuery() {
+      this.listQuery.page = 1
+      this.getList()
     },
   },
 }

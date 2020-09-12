@@ -21,13 +21,13 @@
           </el-select>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" icon="el-icon-edit" @click="getList">查询</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="handleQuery">查询</el-button>
         </el-col>
       </el-row>
 
       <!-- 用户列表区域 -->
       <el-table :data="list" border stripe fit v-loading="loading">
-        <el-table-column align="center" width="55" label="ID" prop="id"></el-table-column>
+        <el-table-column align="center" width="75" label="ID" prop="id"></el-table-column>
 
         <el-table-column label="订单号" align="center" min-width="150">
           <template slot-scope="scope">
@@ -181,6 +181,11 @@ export default {
     handleCelcel() {},
     // 删除
     handleRemove() {},
+    // 点击查询
+    handleQuery() {
+      this.listQuery.page = 1
+      this.getList()
+    },
   },
 }
 </script>
