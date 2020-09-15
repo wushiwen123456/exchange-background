@@ -443,3 +443,39 @@ export function delBanner(data){
     params:data
   })
 }
+
+// 获取用户锁仓列表
+export function getLockList(data){
+  return request({
+    url:'adminUser/lock_list',
+    method:'get',
+    params:data
+  })
+}
+
+// 获取锁仓配置
+export function getLockManager(data){
+  return request({
+    url:'adminUser/lock_setting_list',
+    method:'get',
+    params:data
+  })
+}
+
+// 保存锁仓配置
+export function setLockManager(data){
+  return request({
+    url:'adminUser/lock_setting_list',
+    method:"post",
+    data
+  })
+}
+
+// 删除锁仓配置
+export function removeLockManager(data){
+  return request({
+    url:'adminUser/del_lock_setting',
+    method:'get',
+    params:data
+  })
+}

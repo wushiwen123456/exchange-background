@@ -53,26 +53,26 @@ const allRouters = [
         pid: '30000',
         icon: 'icon-jiaoyisuo'
       },
-      // {
-      //   path: '/userPermissList',
-      //   name: 'UserPermissList',
-      //   authName: '角色列表',
-      //   cid: '60001',
-      //   parentsPath: 'norms',
-      //   parentsName: '权限管理',
-      //   pid: '60000',
-      //   icon: 'icon-quanxian'
-      // },
-      // {
-      //   path: '/permissList',
-      //   name: 'PermissList',
-      //   authName: '权限列表',
-      //   cid: '60002',
-      //   parentsPath: 'norms',
-      //   parentsName: '权限管理',
-      //   pid: '60000',
-      //   icon: 'icon-quanxian'
-      // },
+      {
+        path: '/userPermissList',
+        name: 'UserPermissList',
+        authName: '角色列表',
+        cid: '60001',
+        parentsPath: 'norms',
+        parentsName: '权限管理',
+        pid: '60000',
+        icon: 'icon-quanxian'
+      },
+      {
+        path: '/permissList',
+        name: 'PermissList',
+        authName: '权限列表',
+        cid: '60002',
+        parentsPath: 'norms',
+        parentsName: '权限管理',
+        pid: '60000',
+        icon: 'icon-quanxian'
+      },
       {
         path: '/agentList',
         name: 'AgentList',
@@ -152,6 +152,16 @@ const allRouters = [
         parentsName: '交易机器人',
         pid: '100000',
         icon: 'icon-robot'
+      },
+      {
+        path: '/otherConfig',
+        name: 'OtherConfig',
+        authName: '其他',
+        cid: '110001',
+        parentsPath: 'otherConfig',
+        parentsName: '其他设置',
+        pid: '110000',
+        icon: 'icon-shezhi'
       }
     ]
   }
@@ -212,26 +222,6 @@ const permission1 = [
         pid: '30000',
         icon: 'icon-jiaoyisuo'
       },
-      // {
-      //   path: '/userPermissList',
-      //   name: 'UserPermissList',
-      //   authName: '角色列表',
-      //   cid: '60001',
-      //   parentsPath: 'norms',
-      //   parentsName: '权限管理',
-      //   pid: '60000',
-      //   icon: 'icon-quanxian'
-      // },
-      // {
-      //   path: '/permissList',
-      //   name: 'PermissList',
-      //   authName: '权限列表',
-      //   cid: '60002',
-      //   parentsPath: 'norms',
-      //   parentsName: '权限管理',
-      //   pid: '60000',
-      //   icon: 'icon-quanxian'
-      // },
       {
         path: '/agentList',
         name: 'AgentList',
@@ -251,6 +241,46 @@ const permission1 = [
       //   parentsName: '员工管理',
       //   pid: '50000',
       //   icon: 'icon-yuangong'
+      // },
+      {
+        path: '/lockList',
+        name: 'LockList',
+        authName: '用户锁仓列表',
+        cid: '60001',
+        parentsPath: 'lock',
+        parentsName: '锁仓管理',
+        pid: '60000',
+        icon: 'icon-lock'
+      },
+      {
+        path: '/lockManager',
+        name: 'LockManager',
+        authName: '锁仓配置',
+        cid: '60002',
+        parentsPath: 'lock',
+        parentsName: '锁仓管理',
+        pid: '60000',
+        icon: 'icon-lock'
+      },
+      // {
+      //   path: '/userPermissList',
+      //   name: 'UserPermissList',
+      //   authName: '角色列表',
+      //   cid: '60001',
+      //   parentsPath: 'norms',
+      //   parentsName: '权限管理',
+      //   pid: '60000',
+      //   icon: 'icon-quanxian'
+      // },
+      // {
+      //   path: '/permissList',
+      //   name: 'PermissList',
+      //   authName: '权限列表',
+      //   cid: '60002',
+      //   parentsPath: 'norms',
+      //   parentsName: '权限管理',
+      //   pid: '60000',
+      //   icon: 'icon-quanxian'
       // },
       {
         path: '/collectionList',
@@ -431,7 +461,7 @@ const permission2 = [
         parentsName: '交易机器人',
         pid: '100000',
         icon: 'icon-robot'
-      }
+      },
       // {
       //   path: '/permissList',
       //   name: 'PermissList',
@@ -451,6 +481,26 @@ const permission2 = [
       //   parentsName: '成员管理',
       //   pid: '40000',
       //   icon: 'icon--Manager'
+      // },
+      {
+        path: '/lockList',
+        name: 'LockList',
+        authName: '用户锁仓列表',
+        cid: '60001',
+        parentsPath: 'lock',
+        parentsName: '锁仓管理',
+        pid: '60000',
+        icon: 'icon-lock'
+      },
+      // {
+      //   path: '/lockManager',
+      //   name: 'LockManager',
+      //   authName: '锁仓配置',
+      //   cid: '60002',
+      //   parentsPath: 'lock',
+      //   parentsName: '锁仓管理',
+      //   pid: '60000',
+      //   icon: 'icon-lock'
       // },
       // {
       //   path: '/collectionList',

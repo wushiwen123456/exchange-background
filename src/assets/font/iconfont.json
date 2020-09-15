@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "10506927",
+      "name": "lock",
+      "font_class": "lock",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
       "icon_id": "698159",
       "name": "home page-Selected",
       "font_class": "homepageselected",
